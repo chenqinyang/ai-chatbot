@@ -1,71 +1,28 @@
-# CopilotKit AG-UI Demo — React 19
+# CopilotKit Journey Demo
 
-A split-layout page where an AI chatbot (right) controls the content area (left) in real-time using CopilotKit AG-UI.
+A Vite + React demo with two routed journey pages and a CopilotKit chat drawer.
 
-## How it works
+## Run
 
-| What you type | What happens |
-|---|---|
-| `Update content to Hello World` | Updates the **title** |
-| `Change the title to My New Title` | Updates the **title** |
-| `Update the subtitle to something cool` | Updates the **subtitle** |
-| `Set the body to Lorem ipsum...` | Updates the **body** text |
-| `Change the tag to Breaking News` | Updates the **tag/badge** |
-
-## Setup
-
-### 1. Install dependencies
+1. Paste your OpenAI key into `.env`.
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 2. Get a CopilotKit API key
-
-Sign up free at [cloud.copilotkit.ai](https://cloud.copilotkit.ai) and create a project.
-
-### 3. Configure environment
-
-```bash
-cp .env.example .env
-# Edit .env and paste your key:
-# VITE_COPILOT_PUBLIC_API_KEY=ck_pub_xxxx
-```
-
-### 4. Run
+3. Start the local Copilot runtime and Vite app:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Open `http://localhost:5173`.
 
----
+## What the demo includes
 
-## Self-hosted runtime (optional)
-
-If you prefer to run your own backend (e.g., to keep your OpenAI key server-side):
-
-```bash
-# In a separate backend project:
-npm install @copilotkit/runtime
-
-# server.js (Express example)
-import { CopilotRuntime, OpenAIAdapter } from "@copilotkit/runtime";
-const runtime = new CopilotRuntime();
-app.post("/api/copilotkit", runtime.asExpressEndpoint(new OpenAIAdapter()));
-```
-
-Then in `App.jsx`, replace `publicApiKey` with:
-```jsx
-<CopilotKit runtimeUrl="http://localhost:4000/api/copilotkit">
-```
-
-## Key concepts
-
-| API | Purpose |
-|---|---|
-| `useCopilotAction` | Registers a callable tool the AI can invoke |
-| `useCopilotReadable` | Shares state context with the AI |
-| `CopilotChat` | Drop-in chat UI widget |
-| `CopilotKit` (provider) | Wraps the app, connects to the runtime |
+- `/financial-profile` captures income, savings, investments, expenses, liabilities, and debt payments.
+- `/product-search` captures fund search criteria and displays a fund result table.
+- The chat drawer expands to 30% width and collapses to a small rail.
+- Copilot receives current route, financial profile, product criteria, and visible results as app context.
+- Copilot can update profile fields, update search criteria, replace results, run a sample fund search, and navigate pages through frontend tools.

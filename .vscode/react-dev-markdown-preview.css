@@ -1,0 +1,418 @@
+/* React.dev inspired Markdown Preview CSS for VS Code
+   Usage: "markdown.styles": ["file:///ABSOLUTE/PATH/react-dev-markdown-preview.css"]
+*/
+
+:root {
+  --react-bg: #ffffff;
+  --react-bg-soft: #f6f7f9;
+  --react-bg-card: #f6f7f9;
+  --react-border: #ebecf0;
+  --react-border-strong: #d9dee7;
+  --react-text: #23272f;
+  --react-muted: #404756;
+  --react-faint: #5e687e;
+  --react-link: #087ea4;
+  --react-link-hover: #0b6f91;
+  --react-accent-bg: #e6f7ff;
+  --react-code-bg: #ffffff;
+  --react-code-text: #24292e;
+  --react-code-inline-bg: rgba(153, 161, 179, 0.1);
+  --react-code-shadow: 0 0.8px 2px rgba(0, 0, 0, 0.032), 0 2.7px 6.7px rgba(0, 0, 0, 0.048), 0 12px 30px rgba(0, 0, 0, 0.08);
+  --react-note-bg: #f8fafc;
+  --react-note-border: #58c4dc;
+  --react-danger: #dc2626;
+  --react-radius: 16px;
+  --react-display: "Optimistic Display", -apple-system, ui-sans-serif, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --react-font: "Optimistic Text", -apple-system, ui-sans-serif, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --react-mono: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@font-face {
+  font-family: "Optimistic Display";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Optimistic_Display_W_Bd.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Optimistic Text";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Optimistic_Text_W_Rg.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Optimistic Text";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Optimistic_Text_W_Md.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Optimistic Text";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Optimistic_Text_W_Bd.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Source-Code-Pro-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("https://react.dev/fonts/Source-Code-Pro-Bold.woff2") format("woff2");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --react-bg: #23272f;
+    --react-bg-soft: #343a46;
+    --react-bg-card: #343a46;
+    --react-border: #343a46;
+    --react-border-strong: #404756;
+    --react-text: #f6f7f9;
+    --react-muted: #ebecf0;
+    --react-faint: #99a1b3;
+    --react-link: #58c4dc;
+    --react-link-hover: #79d7ed;
+    --react-accent-bg: rgba(88, 196, 220, 0.12);
+    --react-code-bg: #16181d;
+    --react-code-text: #f6f7f9;
+    --react-code-inline-bg: rgba(246, 247, 249, 0.08);
+    --react-code-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0.8px 2px rgba(0, 0, 0, 0.032), 0 2.7px 6.7px rgba(0, 0, 0, 0.048), 0 12px 30px rgba(0, 0, 0, 0.08);
+    --react-note-bg: #343a46;
+  }
+}
+
+body {
+  background: var(--react-bg) !important;
+}
+
+.vscode-body,
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 32px 96px;
+  background: var(--react-bg);
+  color: var(--react-text);
+  font-family: var(--react-font);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 30px;
+  letter-spacing: 0;
+}
+
+.vscode-body *,
+.vscode-body *::before,
+.vscode-body *::after,
+.markdown-body *,
+.markdown-body *::before,
+.markdown-body *::after {
+  box-sizing: inherit;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  color: var(--react-text);
+  font-family: var(--react-display);
+  font-weight: 700;
+  letter-spacing: 0;
+  border: 0;
+}
+
+.markdown-body h1 {
+  font-size: 40px;
+  line-height: 1.25;
+  margin: 0 0 24px;
+}
+
+.markdown-body h2 {
+  font-size: 28px;
+  line-height: 40px;
+  margin: 48px 0 24px;
+  padding-bottom: 0;
+}
+
+.markdown-body h3 {
+  font-size: 24px;
+  line-height: 36px;
+  margin: 36px 0 24px;
+}
+
+.markdown-body h4 {
+  font-size: 20px;
+  line-height: 36px;
+  margin: 24px 0 16px;
+}
+
+.markdown-body p,
+.markdown-body ul,
+.markdown-body ol {
+  color: var(--react-muted);
+  margin: 16px 0;
+}
+
+.markdown-body strong {
+  color: var(--react-text);
+  font-weight: 700;
+}
+
+.markdown-body a {
+  color: var(--react-link);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.markdown-body a:hover {
+  color: var(--react-link-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown-body hr {
+  height: 1px;
+  background: var(--react-border);
+  border: 0;
+  margin: 48px 0;
+}
+
+.markdown-body blockquote {
+  margin: 28px 0;
+  padding: 18px 22px;
+  border-left: 4px solid var(--react-note-border);
+  border-radius: 0 var(--react-radius) var(--react-radius) 0;
+  background: var(--react-note-bg);
+  color: var(--react-muted);
+}
+
+.markdown-body blockquote p {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.35em;
+}
+
+.markdown-body li {
+  margin: 8px 0;
+  padding-left: 4px;
+}
+
+.markdown-body li::marker {
+  color: var(--react-faint);
+}
+
+.markdown-body code {
+  font-family: var(--react-mono);
+  font-size: calc(1em - 20%);
+  color: var(--react-muted);
+  background: var(--react-code-inline-bg);
+  border: 0;
+  border-radius: 6px;
+  padding: 1px 4px;
+  letter-spacing: 0;
+}
+
+.markdown-body pre {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 32px 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: var(--react-code-text);
+  background: var(--react-code-bg);
+  border: 1px solid transparent;
+  border-radius: var(--react-radius);
+  box-shadow: var(--react-code-shadow);
+  font-family: var(--react-mono);
+  font-size: 13.6px;
+  line-height: 24px;
+  letter-spacing: 0;
+  tab-size: 2;
+  white-space: pre;
+  -webkit-font-smoothing: auto;
+  text-rendering: auto;
+  -webkit-text-size-adjust: none;
+}
+
+.markdown-body pre code {
+  display: block;
+  min-width: 100%;
+  width: max-content;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  letter-spacing: 0;
+  white-space: pre;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  font-feature-settings: normal;
+  font-variant-ligatures: none;
+  tab-size: inherit;
+}
+
+.markdown-body pre code *,
+.markdown-body pre .hljs {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: 0;
+}
+
+@media (max-width: 720px) {
+  .vscode-body,
+  .markdown-body {
+    padding: 32px 20px 72px;
+  }
+
+  .markdown-body h1 {
+    font-size: 40px;
+  }
+
+  .markdown-body h2 {
+    font-size: 28px;
+  }
+
+  .markdown-body pre {
+    padding: 18px 16px;
+    border-radius: 12px;
+  }
+}
+
+.markdown-body table {
+  display: table;
+  width: 100%;
+  margin: 28px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--react-border);
+  border-radius: var(--react-radius);
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 13px 16px;
+  border-right: 1px solid var(--react-border);
+  border-bottom: 1px solid var(--react-border);
+}
+
+.markdown-body th:last-child,
+.markdown-body td:last-child {
+  border-right: 0;
+}
+
+.markdown-body tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdown-body th {
+  background: var(--react-bg-soft);
+  color: var(--react-text);
+  font-weight: 700;
+}
+
+.markdown-body td {
+  color: var(--react-muted);
+  background: var(--react-bg-card);
+}
+
+.markdown-body img {
+  max-width: 100%;
+  border-radius: var(--react-radius);
+  border: 1px solid var(--react-border);
+}
+
+.markdown-body kbd {
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--react-border-strong);
+  background: var(--react-bg-soft);
+  color: var(--react-text);
+  font-family: var(--react-mono);
+  font-size: 0.82em;
+}
+
+/* VS Code / highlight.js token colors, React-docs inspired */
+.markdown-body .hljs-keyword,
+.markdown-body .hljs-selector-tag,
+.markdown-body .hljs-built_in {
+  color: #d73a49;
+}
+.markdown-body .hljs-string,
+.markdown-body .hljs-attr,
+.markdown-body .hljs-symbol {
+  color: #22863a;
+}
+.markdown-body .hljs-title,
+.markdown-body .hljs-function,
+.markdown-body .hljs-section {
+  color: #6f42c1;
+}
+.markdown-body .hljs-variable,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-name {
+  color: #005cc5;
+}
+.markdown-body .hljs-comment,
+.markdown-body .hljs-quote {
+  color: #6a737d;
+  font-style: italic;
+}
+.markdown-body .hljs-number,
+.markdown-body .hljs-literal {
+  color: #e36209;
+}
+.markdown-body .hljs-tag {
+  color: #22863a;
+}
+.markdown-body .hljs-punctuation,
+.markdown-body .hljs-operator {
+  color: var(--react-code-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  .markdown-body .hljs-keyword,
+  .markdown-body .hljs-selector-tag,
+  .markdown-body .hljs-built_in { color: #ff7b72; }
+  .markdown-body .hljs-string,
+  .markdown-body .hljs-attr,
+  .markdown-body .hljs-symbol { color: #a5d6ff; }
+  .markdown-body .hljs-title,
+  .markdown-body .hljs-function,
+  .markdown-body .hljs-section { color: #d2a8ff; }
+  .markdown-body .hljs-variable,
+  .markdown-body .hljs-template-variable,
+  .markdown-body .hljs-name { color: #79c0ff; }
+  .markdown-body .hljs-comment,
+  .markdown-body .hljs-quote { color: #8b949e; }
+  .markdown-body .hljs-number,
+  .markdown-body .hljs-literal { color: #ffa657; }
+  .markdown-body .hljs-tag { color: #7ee787; }
+}
