@@ -3,7 +3,9 @@ import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "reac
 import { z } from "zod";
 import {
   Banknote,
+  Bot,
   CircleDollarSign,
+  LoaderCircle,
   MessageSquare,
   PanelRightClose,
   PanelRightOpen,
@@ -14,7 +16,14 @@ import {
   TrendingUp,
   WalletCards
 } from "lucide-react";
-import { CopilotChat, useAgentContext, useFrontendTool } from "@copilotkit/react-core/v2";
+import {
+  CopilotChat,
+  UseAgentUpdate,
+  useAgent,
+  useAgentContext,
+  useCopilotKit,
+  useFrontendTool
+} from "@copilotkit/react-core/v2";
 
 const pageMeta = {
   "financial-profile": {
@@ -67,6 +76,26 @@ const initialProductCriteria = {
   currency: "USD",
   minYield: 3.2,
   horizon: "3-5 years",
+  esg: true
+};
+
+const profileToolDemoParameters = {
+  annualIncome: 16800,
+  liquidSavings: 68000,
+  investmentAssets: 215000,
+  monthlyExpenses: 5900,
+  liabilities: 58000,
+  monthlyDebtPayments: 980
+};
+
+const searchToolDemoParameters = {
+  query: "bond income",
+  risk: "Moderate",
+  assetClass: "Fixed income",
+  region: "Global",
+  currency: "USD",
+  minYield: 4,
+  horizon: "1-3 years",
   esg: true
 };
 
@@ -759,13 +788,24 @@ const riskLimit = { Conservative: 1, Moderate: 2, Aggressive: 3 };
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { copilotkit } = useCopilotKit();
+  const { agent } = useAgent({
+    agentId: "default",
+    updates: [UseAgentUpdate.OnMessagesChanged, UseAgentUpdate.OnRunStatusChanged]
+  });
   const [financialProfile, setFinancialProfile] = useState(initialFinancialProfile);
   const [productCriteria, setProductCriteria] = useState(initialProductCriteria);
   const [fundResults, setFundResults] = useState(() => runLocalFundSearch(initialProductCriteria));
   const [chatCollapsed, setChatCollapsed] = useState(false);
+  const [toolDemoRun, setToolDemoRun] = useState({
+    target: null,
+    status: "idle",
+    message: "Ready"
+  });
 
   const currentPage =
     location.pathname.includes("product-search") ? "product-search" : "financial-profile";
+  const defaultAgentReady = Boolean(copilotkit.getAgent("default"));
 
   const profileSummary = useMemo(
     () => summarizeFinancialProfile(financialProfile),
@@ -802,7 +842,7 @@ function App() {
       navigate(pageMeta[page].route);
       return `Navigated to ${pageMeta[page].title}.`;
     }
-  });
+  }, [navigate]);
 
   useFrontendTool({
     name: "update_financial_profile",
@@ -819,7 +859,8 @@ function App() {
     handler: (updates) => {
       setFinancialProfile((current) => ({ ...current, ...definedNumbers(updates) }));
       return "Financial profile updated.";
-    }
+    },
+    followUp: false
   });
 
   useFrontendTool({
@@ -841,7 +882,8 @@ function App() {
     handler: (updates) => {
       setProductCriteria((current) => ({ ...current, ...definedValues(updates) }));
       return "Product search criteria updated.";
-    }
+    },
+    followUp: false
   });
 
   useFrontendTool({
@@ -867,8 +909,9 @@ function App() {
       setFundResults(nextResults);
       navigate(pageMeta["product-search"].route);
       return JSON.stringify(nextResults, null, 2);
-    }
-  });
+    },
+    followUp: false
+  }, [navigate, productCriteria]);
 
   useFrontendTool({
     name: "replace_fund_results",
@@ -902,8 +945,89 @@ function App() {
       setFundResults(nextResults);
       navigate(pageMeta["product-search"].route);
       return "Fund results replaced.";
+    },
+    followUp: false
+  }, [navigate]);
+
+  const getToolDemoState = (target) => {
+    const runningThisTarget = toolDemoRun.status === "running" && toolDemoRun.target === target;
+    const runningOtherTarget = toolDemoRun.status === "running" && toolDemoRun.target !== target;
+    const disabled = !defaultAgentReady || agent.isRunning || toolDemoRun.status === "running";
+
+    return {
+      disabled,
+      busy: runningThisTarget,
+      status: !defaultAgentReady
+        ? "loading"
+        : runningOtherTarget
+          ? "running"
+          : toolDemoRun.target === target
+            ? toolDemoRun.status
+            : "idle",
+      message: !defaultAgentReady
+        ? "Agent loading"
+        : agent.isRunning
+          ? "Agent busy"
+          : runningOtherTarget
+            ? "Tool running"
+            : toolDemoRun.target === target
+              ? toolDemoRun.message
+              : "Ready"
+    };
+  };
+
+  const runAgentToolDemo = async (target) => {
+    if (!defaultAgentReady) {
+      setToolDemoRun({
+        target,
+        status: "error",
+        message: "Agent not ready"
+      });
+      return;
     }
-  });
+
+    const runConfig =
+      target === "profile"
+        ? {
+            name: "update_financial_profile",
+            parameters: profileToolDemoParameters,
+            successMessage: "Profile updated"
+          }
+        : {
+            name: "run_product_search",
+            parameters: searchToolDemoParameters,
+            successMessage: "Search refreshed"
+          };
+
+    setToolDemoRun({
+      target,
+      status: "running",
+      message: "Running tool"
+    });
+
+    try {
+      await copilotkit.runTool({
+        name: runConfig.name,
+        parameters: runConfig.parameters,
+        followUp: false
+      });
+
+      const liveAgent = copilotkit.getAgent("default");
+      liveAgent?.setMessages([...liveAgent.messages]);
+
+      setToolDemoRun({
+        target,
+        status: "success",
+        message: runConfig.successMessage
+      });
+    } catch (error) {
+      setToolDemoRun({
+        target,
+        status: "error",
+        message: error instanceof Error ? error.message : "Tool run failed"
+      });
+    }
+  };
 
   const updateFinancialField = (key, value) => {
     setFinancialProfile((current) => ({
@@ -957,6 +1081,8 @@ function App() {
                 summary={profileSummary}
                 onChange={updateFinancialField}
                 onNext={() => navigate(pageMeta["product-search"].route)}
+                toolDemo={getToolDemoState("profile")}
+                onRunToolDemo={() => runAgentToolDemo("profile")}
               />
             }
           />
@@ -969,6 +1095,8 @@ function App() {
                 onCriteriaChange={updateCriteria}
                 onSearch={runSearchFromUi}
                 onBack={() => navigate(pageMeta["financial-profile"].route)}
+                toolDemo={getToolDemoState("search")}
+                onRunToolDemo={() => runAgentToolDemo("search")}
               />
             }
           />
@@ -985,7 +1113,7 @@ function App() {
   );
 }
 
-function FinancialProfilePage({ profile, summary, onChange, onNext }) {
+function FinancialProfilePage({ profile, summary, onChange, onNext, toolDemo, onRunToolDemo }) {
   return (
     <section className="page-grid">
       <div className="page-main">
@@ -1028,12 +1156,25 @@ function FinancialProfilePage({ profile, summary, onChange, onNext }) {
         <Metric label="Monthly Surplus" value={formatCurrency(summary.monthlySurplus)} />
         <Metric label="Debt-to-Income" value={`${summary.debtToIncome}%`} />
         <Metric label="Investable Assets" value={formatCurrency(summary.investableAssets)} />
+        <AgentToolRunButton
+          label="Run Profile Tool"
+          toolDemo={toolDemo}
+          onRun={onRunToolDemo}
+        />
       </aside>
     </section>
   );
 }
 
-function ProductSearchPage({ criteria, results, onCriteriaChange, onSearch, onBack }) {
+function ProductSearchPage({
+  criteria,
+  results,
+  onCriteriaChange,
+  onSearch,
+  onBack,
+  toolDemo,
+  onRunToolDemo
+}) {
   return (
     <section className="product-layout">
       <div className="search-panel">
@@ -1109,6 +1250,11 @@ function ProductSearchPage({ criteria, results, onCriteriaChange, onSearch, onBa
           <Search size={16} />
           Search Funds
         </button>
+        <AgentToolRunButton
+          label="Run Search Tool"
+          toolDemo={toolDemo}
+          onRun={onRunToolDemo}
+        />
       </div>
 
       <div className="results-panel">
@@ -1154,6 +1300,25 @@ function ProductSearchPage({ criteria, results, onCriteriaChange, onSearch, onBa
         </div>
       </div>
     </section>
+  );
+}
+
+function AgentToolRunButton({ label, toolDemo, onRun }) {
+  const Icon = toolDemo.busy ? LoaderCircle : Bot;
+
+  return (
+    <div className="agent-tool-row">
+      <button
+        className="secondary-button agent-tool-button"
+        type="button"
+        onClick={onRun}
+        disabled={toolDemo.disabled}
+      >
+        <Icon className={toolDemo.busy ? "spin-icon" : undefined} size={16} />
+        {toolDemo.busy ? "Running Tool" : label}
+      </button>
+      <span className={`agent-tool-status ${toolDemo.status}`}>{toolDemo.message}</span>
+    </div>
   );
 }
 

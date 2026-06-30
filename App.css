@@ -204,6 +204,12 @@ h2 {
   border-color: #94a3b8;
 }
 
+.secondary-button:disabled,
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
@@ -314,6 +320,48 @@ h2 {
 .search-action {
   width: 100%;
   margin-top: 16px;
+}
+
+.agent-tool-row {
+  display: grid;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.agent-tool-button {
+  width: 100%;
+}
+
+.agent-tool-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.agent-tool-status.success {
+  color: var(--teal);
+}
+
+.agent-tool-status.error {
+  color: var(--rose);
+}
+
+.agent-tool-status.running,
+.agent-tool-status.loading {
+  color: var(--amber);
+}
+
+.spin-icon {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .table-wrap {

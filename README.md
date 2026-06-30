@@ -26,3 +26,4 @@ Open `http://localhost:5173`.
 - The chat drawer expands to 30% width and collapses to a small rail.
 - Copilot receives current route, financial profile, product criteria, and visible results as app context.
 - Copilot can update profile fields, update search criteria, replace results, run a sample fund search, and navigate pages through frontend tools.
+- The profile and search pages include buttons that invoke registered frontend tools through CopilotKit without an LLM follow-up.
