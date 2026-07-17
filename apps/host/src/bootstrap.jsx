@@ -3,13 +3,15 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { CopilotKit } from "@copilotkit/react-core/v2";
 import "@copilotkit/react-core/v2/styles.css";
-import App from "./App.jsx";
-import "./App.css";
+import "../../../packages/theme/journey.css";
+import JourneyHost from "./JourneyHost.jsx";
+
+const runtimeUrl = import.meta.env.PUBLIC_COPILOT_RUNTIME_URL || "/api/copilotkit";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <CopilotKit
-      runtimeUrl="/api/copilotkit"
+      runtimeUrl={runtimeUrl}
       useSingleEndpoint={false}
       showDevConsole="auto"
       onError={({ code, error, context }) => {
@@ -17,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       }}
     >
       <BrowserRouter>
-        <App />
+        <JourneyHost />
       </BrowserRouter>
     </CopilotKit>
   </React.StrictMode>

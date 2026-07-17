@@ -42,6 +42,73 @@ button {
   min-height: 100vh;
 }
 
+.remote-preview {
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.remote-standalone {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  min-height: 100vh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.remote-standalone > p:last-child {
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+.remote-loading,
+.remote-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 260px;
+  color: var(--ink-muted);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.remote-loading-chat,
+.remote-error-chat {
+  flex: 0 0 clamp(380px, 30vw, 540px);
+  min-width: 360px;
+  min-height: 100vh;
+  border-radius: 0;
+  border-width: 0 0 0 1px;
+}
+
+.remote-error {
+  padding: 24px;
+}
+
+.remote-error div {
+  display: grid;
+  gap: 4px;
+}
+
+.remote-error span {
+  color: var(--ink-muted);
+  font-size: 0.86rem;
+}
+
+.remote-error button {
+  min-height: 36px;
+  padding: 0 12px;
+  color: #ffffff;
+  background: var(--navy);
+  border: 0;
+  border-radius: 6px;
+  font-weight: 800;
+}
+
 .app-shell {
   display: flex;
   min-height: 100vh;

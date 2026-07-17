@@ -17,7 +17,7 @@ const deepseek = createOpenAI({
 
 if (!process.env.DEEPSEEK_API_KEY || process.env.DEEPSEEK_API_KEY.includes("paste-your")) {
   console.warn(
-    "[copilotkit-demo] DEEPSEEK_API_KEY is not set. Add your DeepSeek key to .env before chatting."
+    "[host-ui] DEEPSEEK_API_KEY is not set. Add your DeepSeek key to .env before chatting."
   );
 }
 
@@ -27,8 +27,8 @@ const runtime = new CopilotRuntime({
       model: deepseek.chat(model),
       prompt: [
         "You are an investment journey assistant for a demo web app.",
-        "Use the provided app context to understand the active route, financial profile, product search criteria, and visible fund results.",
-        "When the user asks to change data in the journey UI, call the available frontend tools instead of only explaining the change.",
+        "Use all provided shell and remote feature context to understand the current journey.",
+        "When the user asks to change application data, call the available frontend tools instead of only explaining the change.",
         "Keep responses concise, practical, and aware of the current page style."
       ].join(" "),
       maxSteps: 5
@@ -69,6 +69,45 @@ app.all(["/api/copilotkit", "/api/copilotkit/*"], async (req, res, next) => {
   }
 });
 
-app.listen(port, host, () => {
-  console.log(`[copilotkit-demo] Runtime listening on http://${host}:${port}/api/copilotkit`);
+const server = app.listen(port, host, () => {
+  console.log(`[host-ui] CopilotKit runtime listening on http://${host}:${port}/api/copilotkit`);
+});
+
+server.on("error", async (error) => {
+  if (error.code !== "EADDRINUSE") {
+    throw error;
+  }
+
+  const healthHost = host === "0.0.0.0" || host === "::" ? "127.0.0.1" : host;
+  const healthUrl = `http://${healthHost}:${port}/health`;
+
+  try {
+    const response = await fetch(healthUrl);
+    const health = await response.json();
+
+    if (!response.ok || !health?.ok) {
+      throw new Error("The existing service did not return a healthy runtime response.");
+    }
+
+    console.warn(
+      `[host-ui] Port ${port} already has a healthy CopilotKit runtime. Reusing the existing service.`
+    );
+
+    // Keep this supervised command alive so concurrently does not stop the
+    // three frontend development servers while the existing runtime is reused.
+    const keepAlive = setInterval(() => {}, 2 ** 30);
+    const stop = () => {
+      clearInterval(keepAlive);
+      process.exit(0);
+    };
+
+    process.once("SIGINT", stop);
+    process.once("SIGTERM", stop);
+  } catch (healthError) {
+    console.error(
+      `[host-ui] Port ${port} is already in use by another service. Stop that process or set a different PORT in .env.`,
+      healthError
+    );
+    process.exit(1);
+  }
 });

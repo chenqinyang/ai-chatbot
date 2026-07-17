@@ -1,0 +1,1989 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive architecture map of a React 19 platform host, a React 18 Profile feature, and a React 19 Product feature that contribute remote-owned capabilities to one CopilotKit core."
+    />
+    <title>React Bridge + CopilotKit — Federated Investment Copilot</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #08101f;
+        --panel: rgba(17, 29, 51, 0.82);
+        --panel-strong: #13223c;
+        --line: rgba(152, 173, 211, 0.24);
+        --line-strong: rgba(152, 173, 211, 0.5);
+        --text: #f7f9ff;
+        --muted: #a6b4cf;
+        --blue: #6d9cff;
+        --cyan: #3ddbd9;
+        --violet: #b093ff;
+        --amber: #ffbe5c;
+        --green: #62d69a;
+        --red: #ff7b87;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 16% 8%, rgba(71, 105, 197, 0.2), transparent 29rem),
+          radial-gradient(circle at 86% 22%, rgba(87, 56, 170, 0.17), transparent 30rem),
+          linear-gradient(160deg, #0b1529 0%, var(--bg) 48%, #090e18 100%);
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 48px 48px;
+        content: "";
+        mask-image: linear-gradient(to bottom, black, transparent 86%);
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .page {
+        width: min(1440px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 44px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 30px;
+        align-items: end;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 13px;
+        color: var(--cyan);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 24px;
+        height: 2px;
+        background: currentColor;
+        content: "";
+      }
+
+      h1 {
+        max-width: 850px;
+        margin: 0;
+        font-size: clamp(2.4rem, 6vw, 5.8rem);
+        font-weight: 500;
+        letter-spacing: -0.055em;
+        line-height: 0.94;
+      }
+
+      .hero-copy {
+        max-width: 720px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.5vw, 1.17rem);
+        line-height: 1.65;
+      }
+
+      .status {
+        display: grid;
+        gap: 8px;
+        min-width: 190px;
+        padding: 18px;
+        background: rgba(12, 22, 40, 0.72);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .status span {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .status strong {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.94rem;
+      }
+
+      .status strong::before {
+        width: 9px;
+        height: 9px;
+        background: var(--green);
+        border-radius: 50%;
+        box-shadow: 0 0 0 5px rgba(98, 214, 154, 0.12);
+        content: "";
+      }
+
+      .summary-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        margin: 26px 0;
+        overflow: hidden;
+        background: rgba(14, 25, 45, 0.65);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      .summary-item {
+        display: grid;
+        gap: 4px;
+        padding: 16px 20px;
+        border-right: 1px solid var(--line);
+      }
+
+      .summary-item:last-child {
+        border-right: 0;
+      }
+
+      .summary-item strong {
+        font-size: 1.3rem;
+      }
+
+      .summary-item span {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .summary-item code {
+        color: inherit;
+        font-size: 1.18rem;
+        font-weight: 500;
+      }
+
+      .summary-item.is-host {
+        color: var(--blue);
+      }
+
+      .summary-item.is-profile {
+        color: var(--cyan);
+      }
+
+      .summary-item.is-copilot {
+        color: var(--green);
+      }
+
+      .summary-item.is-isolated {
+        color: var(--amber);
+      }
+
+      .tabs {
+        display: inline-flex;
+        gap: 4px;
+        margin-bottom: 18px;
+        padding: 4px;
+        background: rgba(10, 19, 34, 0.76);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+
+      .tab {
+        min-height: 40px;
+        padding: 0 16px;
+        color: var(--muted);
+        background: transparent;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .tab:hover {
+        color: var(--text);
+      }
+
+      .tab[aria-selected="true"] {
+        color: var(--text);
+        background: var(--panel-strong);
+        box-shadow: inset 0 0 0 1px rgba(152, 173, 211, 0.2);
+      }
+
+      .view {
+        display: none;
+      }
+
+      .view.is-active {
+        display: block;
+        animation: reveal 240ms ease-out;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+      }
+
+      .architecture {
+        padding: 28px;
+        background: linear-gradient(145deg, rgba(18, 31, 55, 0.88), rgba(9, 17, 31, 0.92));
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .version-boundary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 0.72fr);
+        gap: 14px;
+        align-items: stretch;
+        margin-bottom: 26px;
+      }
+
+      .root-zone,
+      .bridge-gate {
+        min-width: 0;
+        padding: 16px 18px;
+        background: rgba(8, 16, 29, 0.66);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      .root-zone {
+        display: grid;
+        gap: 8px;
+      }
+
+      .root-zone.shared-root {
+        border-color: color-mix(in srgb, var(--blue) 44%, transparent);
+      }
+
+      .root-zone.isolated-root {
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--cyan) 56%, transparent);
+      }
+
+      .root-zone-label,
+      .bridge-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.67rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .root-zone strong,
+      .bridge-gate strong {
+        font-size: 0.95rem;
+      }
+
+      .root-members {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .root-members span,
+      .node-tag,
+      .scope-tag {
+        display: inline-flex;
+        align-items: center;
+        width: max-content;
+        min-height: 24px;
+        padding: 3px 8px;
+        color: var(--muted);
+        background: rgba(152, 173, 211, 0.08);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 0.69rem;
+        font-weight: 500;
+      }
+
+      .bridge-gate {
+        display: grid;
+        place-content: center;
+        gap: 6px;
+        min-width: 210px;
+        color: var(--amber);
+        text-align: center;
+        border-color: color-mix(in srgb, var(--amber) 42%, transparent);
+      }
+
+      .bridge-gate::before,
+      .bridge-gate::after {
+        color: var(--amber);
+        font-size: 1rem;
+        content: "⇄";
+      }
+
+      .bridge-gate::after {
+        display: none;
+      }
+
+      .bridge-detail {
+        color: var(--muted);
+        font: 500 0.69rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .diagram {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      .node {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        min-height: 180px;
+        padding: 20px;
+        color: var(--text);
+        text-align: left;
+        background: rgba(17, 30, 52, 0.95);
+        border: 1px solid var(--node-color, var(--line-strong));
+        border-radius: 16px;
+        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
+        cursor: pointer;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          background 180ms ease;
+      }
+
+      .node:hover,
+      .node:focus-visible,
+      .node.is-selected {
+        outline: none;
+        transform: translateY(-3px);
+        background: rgba(22, 39, 68, 0.98);
+        box-shadow:
+          0 22px 54px rgba(0, 0, 0, 0.34),
+          0 0 0 3px color-mix(in srgb, var(--node-color) 16%, transparent);
+      }
+
+      .node-host {
+        --node-color: var(--blue);
+        grid-column: 3 / 9;
+        grid-row: 1;
+        min-height: 220px;
+      }
+
+      .node-runtime {
+        --node-color: var(--amber);
+        grid-column: 9 / 13;
+        grid-row: 1;
+        min-height: 220px;
+      }
+
+      .node-profile {
+        --node-color: var(--cyan);
+        grid-column: 1 / 5;
+        grid-row: 3;
+      }
+
+      .node-product {
+        --node-color: var(--violet);
+        grid-column: 5 / 9;
+        grid-row: 3;
+      }
+
+      .node-chat {
+        --node-color: var(--green);
+        grid-column: 9 / 13;
+        grid-row: 3;
+      }
+
+      .node-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .node-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        color: #07101f;
+        background: var(--node-color);
+        border-radius: 11px;
+        font-weight: 500;
+      }
+
+      .port {
+        padding: 5px 8px;
+        color: var(--node-color);
+        background: color-mix(in srgb, var(--node-color) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--node-color) 30%, transparent);
+        border-radius: 999px;
+        font: 500 0.72rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .node h2 {
+        margin: 18px 0 5px;
+        font-size: 1.24rem;
+      }
+
+      .node-path {
+        margin: 0;
+        color: var(--node-color);
+        font: 500 0.78rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .node-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 12px;
+      }
+
+      .node-tag {
+        color: var(--node-color);
+        border-color: color-mix(in srgb, var(--node-color) 26%, transparent);
+      }
+
+      .node-profile {
+        border-style: dashed;
+      }
+
+      .node-description {
+        align-self: end;
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 0.87rem;
+        line-height: 1.52;
+      }
+
+      .connector {
+        position: relative;
+        z-index: 1;
+        grid-row: 2;
+        height: 46px;
+      }
+
+      .connector::before,
+      .connector::after {
+        position: absolute;
+        background: var(--line-strong);
+        content: "";
+      }
+
+      .connector-profile {
+        grid-column: 3 / 4;
+      }
+
+      .connector-product {
+        grid-column: 6 / 8;
+      }
+
+      .connector-chat {
+        grid-column: 10 / 11;
+      }
+
+      .connector::before {
+        top: -22px;
+        left: 50%;
+        width: 1px;
+        height: 68px;
+      }
+
+      .connector span {
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        z-index: 2;
+        padding: 4px 7px;
+        color: var(--muted);
+        white-space: nowrap;
+        background: #101c31;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font: 500 0.65rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        transform: translateX(-50%);
+      }
+
+      .api-line {
+        position: absolute;
+        top: 109px;
+        right: calc(33.333% - 6px);
+        z-index: 3;
+        width: calc(8.333% + 30px);
+        height: 1px;
+        background: linear-gradient(90deg, var(--blue), var(--amber));
+      }
+
+      .api-line::after {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid var(--amber);
+        border-right: 2px solid var(--amber);
+        content: "";
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .api-line span {
+        position: absolute;
+        top: -27px;
+        left: 50%;
+        padding: 4px 7px;
+        color: var(--amber);
+        white-space: nowrap;
+        background: #101c31;
+        border: 1px solid rgba(255, 190, 92, 0.25);
+        border-radius: 999px;
+        font: 500 0.64rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        transform: translateX(-50%);
+      }
+
+      .diagram-wrap {
+        position: relative;
+      }
+
+      .inspector {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        margin-top: 24px;
+        padding: 20px;
+        background: rgba(8, 16, 29, 0.66);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      .inspector-label {
+        margin: 0 0 6px;
+        color: var(--cyan);
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .inspector h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .inspector p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .inspector code {
+        display: block;
+        max-width: 420px;
+        padding: 11px 13px;
+        overflow: auto;
+        color: #cfe0ff;
+        background: #091322;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        font-size: 0.76rem;
+        white-space: nowrap;
+      }
+
+      .flow-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .flow-step {
+        position: relative;
+        min-height: 230px;
+        padding: 22px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+      }
+
+      .flow-step:not(:last-child)::after {
+        position: absolute;
+        top: 39px;
+        right: -19px;
+        z-index: 3;
+        width: 24px;
+        height: 1px;
+        background: var(--line-strong);
+        content: "";
+      }
+
+      .step-number {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        color: #07101f;
+        background: var(--cyan);
+        border-radius: 50%;
+        font-weight: 500;
+      }
+
+      .flow-step h3 {
+        margin: 23px 0 9px;
+        font-size: 1rem;
+      }
+
+      .flow-step p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.58;
+      }
+
+      .flow-step code {
+        display: inline-block;
+        margin-top: 15px;
+        color: var(--cyan);
+        font-size: 0.72rem;
+      }
+
+      .flow-step.is-runtime .step-number {
+        background: var(--amber);
+      }
+
+      .flow-step.is-bridge {
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--cyan) 44%, transparent);
+      }
+
+      .flow-step.is-bridge .step-number {
+        background: var(--cyan);
+      }
+
+      .scope-tag {
+        margin-top: 16px;
+      }
+
+      .flow-rule {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: 14px;
+        align-items: center;
+        margin-top: 18px;
+        padding: 16px 18px;
+        color: var(--muted);
+        background: rgba(10, 19, 34, 0.75);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font-size: 0.8rem;
+      }
+
+      .flow-rule strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--text);
+      }
+
+      .flow-rule-arrow {
+        color: var(--amber);
+        font: 500 0.76rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-align: center;
+      }
+
+      .contract-table {
+        width: 100%;
+        overflow: hidden;
+        border-collapse: separate;
+        border: 1px solid var(--line);
+        border-spacing: 0;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .contract-table th,
+      .contract-table td {
+        padding: 16px 18px;
+        text-align: left;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      .contract-table th:last-child,
+      .contract-table td:last-child {
+        border-right: 0;
+      }
+
+      .contract-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .contract-table th {
+        color: var(--muted);
+        background: rgba(9, 18, 33, 0.92);
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .contract-table td {
+        background: var(--panel);
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
+
+      .contract-table code {
+        color: var(--cyan);
+        font-size: 0.75rem;
+      }
+
+      .contract-table strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .singleton-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        align-items: center;
+        margin-top: 20px;
+        padding: 16px 18px;
+        color: var(--muted);
+        background: rgba(10, 19, 34, 0.75);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font-size: 0.8rem;
+      }
+
+      .singleton-bar strong {
+        margin-right: 6px;
+        color: var(--text);
+      }
+
+      .singleton-bar code {
+        padding: 5px 8px;
+        color: var(--violet);
+        background: rgba(176, 147, 255, 0.09);
+        border: 1px solid rgba(176, 147, 255, 0.2);
+        border-radius: 999px;
+      }
+
+      .boundary-bars {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .boundary-bars .singleton-bar {
+        margin-top: 0;
+      }
+
+      .singleton-bar.profile-boundary code {
+        color: var(--cyan);
+        background: rgba(61, 219, 217, 0.08);
+        border-color: rgba(61, 219, 217, 0.2);
+      }
+
+      .singleton-bar.copilot-boundary code {
+        color: var(--green);
+        background: rgba(98, 214, 154, 0.08);
+        border-color: rgba(98, 214, 154, 0.2);
+      }
+
+      .guide-shell {
+        overflow: hidden;
+        background: linear-gradient(145deg, rgba(18, 31, 55, 0.88), rgba(9, 17, 31, 0.92));
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .guide-principle {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: 18px;
+        align-items: center;
+        padding: 26px 28px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .guide-side {
+        min-width: 0;
+      }
+
+      .guide-kicker {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .guide-side strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 1.02rem;
+      }
+
+      .guide-side p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.58;
+      }
+
+      .guide-side code {
+        color: var(--cyan);
+      }
+
+      .guide-handoff {
+        display: grid;
+        place-items: center;
+        min-width: 214px;
+        color: var(--amber);
+        text-align: center;
+      }
+
+      .guide-handoff::before {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, var(--blue), var(--amber), var(--cyan));
+        content: "";
+      }
+
+      .guide-handoff strong {
+        margin: 9px 0 5px;
+        font-size: 0.76rem;
+      }
+
+      .guide-handoff span {
+        color: var(--muted);
+        font: 500 0.68rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .guide-steps {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .guide-step {
+        min-width: 0;
+        padding: 24px 28px 28px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .guide-step:nth-child(even) {
+        border-right: 0;
+      }
+
+      .guide-step:nth-last-child(-n + 2) {
+        border-bottom: 0;
+      }
+
+      .guide-step-header {
+        display: flex;
+        gap: 13px;
+        align-items: flex-start;
+      }
+
+      .guide-number {
+        display: grid;
+        flex: 0 0 auto;
+        place-items: center;
+        width: 31px;
+        height: 31px;
+        color: #07101f;
+        background: var(--cyan);
+        border-radius: 50%;
+        font-weight: 500;
+      }
+
+      .guide-step h3 {
+        margin: 1px 0 5px;
+        font-size: 0.98rem;
+      }
+
+      .guide-file {
+        color: var(--cyan);
+        font: 500 0.7rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .guide-step p {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 0.84rem;
+        line-height: 1.58;
+      }
+
+      .code-sample {
+        margin: 16px 0 0;
+        padding: 14px 16px;
+        overflow-x: auto;
+        color: #cfe0ff;
+        background: #091322;
+        border-left: 2px solid var(--step-accent, var(--cyan));
+        font: 400 0.72rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+        white-space: pre;
+      }
+
+      .guide-step.is-host {
+        --step-accent: var(--blue);
+      }
+
+      .guide-step.is-bridge {
+        --step-accent: var(--amber);
+      }
+
+      .guide-step.is-lifecycle {
+        --step-accent: var(--green);
+      }
+
+      .guide-guardrails {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+      }
+
+      .guide-guardrail {
+        padding: 19px 22px;
+        border-right: 1px solid var(--line);
+      }
+
+      .guide-guardrail:last-child {
+        border-right: 0;
+      }
+
+      .guide-guardrail strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+      }
+
+      .guide-guardrail span {
+        color: var(--muted);
+        font-size: 0.76rem;
+        line-height: 1.5;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      @media (max-width: 980px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .status {
+          width: max-content;
+        }
+
+        .diagram {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .node-host,
+        .node-runtime,
+        .node-profile,
+        .node-product,
+        .node-chat {
+          grid-column: auto;
+          grid-row: auto;
+        }
+
+        .node-host {
+          grid-column: 1 / -1;
+        }
+
+        .node-chat {
+          grid-column: 1 / -1;
+        }
+
+        .connector,
+        .api-line {
+          display: none;
+        }
+
+        .flow-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .flow-step:not(:last-child)::after {
+          display: none;
+        }
+
+        .version-boundary {
+          grid-template-columns: 1fr;
+        }
+
+        .bridge-gate {
+          min-width: 0;
+        }
+
+        .bridge-gate::before {
+          content: "⇅";
+        }
+
+        .flow-rule {
+          grid-template-columns: 1fr;
+        }
+
+        .flow-rule-arrow {
+          text-align: left;
+        }
+
+        .guide-principle {
+          grid-template-columns: 1fr;
+        }
+
+        .guide-handoff {
+          min-width: 0;
+        }
+
+        .guide-guardrails {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .guide-guardrail:nth-child(2) {
+          border-right: 0;
+        }
+
+        .guide-guardrail:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      @media (max-width: 680px) {
+        .page {
+          width: min(100% - 24px, 1440px);
+          padding-top: 26px;
+        }
+
+        .summary-strip,
+        .diagram,
+        .flow-grid,
+        .version-boundary {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-item {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .summary-item:last-child {
+          border-bottom: 0;
+        }
+
+        .node-host,
+        .node-chat {
+          grid-column: auto;
+        }
+
+        .architecture {
+          padding: 16px;
+        }
+
+        .inspector {
+          grid-template-columns: 1fr;
+        }
+
+        .tabs {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          width: 100%;
+        }
+
+        .tab {
+          padding: 0 8px;
+          font-size: 0.78rem;
+        }
+
+        .table-wrap {
+          overflow-x: auto;
+        }
+
+        .contract-table {
+          min-width: 720px;
+        }
+
+        .guide-principle {
+          padding: 21px 20px;
+        }
+
+        .guide-steps,
+        .guide-guardrails {
+          grid-template-columns: 1fr;
+        }
+
+        .guide-step,
+        .guide-step:nth-child(even),
+        .guide-step:nth-last-child(-n + 2) {
+          padding: 21px 20px 24px;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .guide-step:last-child {
+          border-bottom: 0;
+        }
+
+        .guide-guardrail,
+        .guide-guardrail:nth-child(2),
+        .guide-guardrail:nth-child(-n + 2) {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .guide-guardrail:last-child {
+          border-bottom: 0;
+        }
+
+        footer {
+          display: grid;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      @media print {
+        :root {
+          color-scheme: light;
+          --bg: #fff;
+          --panel: #fff;
+          --panel-strong: #f5f7fb;
+          --line: #ccd4e1;
+          --line-strong: #9ba8bc;
+          --text: #172033;
+          --muted: #556278;
+        }
+
+        body {
+          background: #fff;
+        }
+
+        body::before,
+        .tabs,
+        .inspector {
+          display: none;
+        }
+
+        .page {
+          width: 100%;
+          padding: 20px;
+        }
+
+        .view {
+          display: block;
+          margin-top: 26px;
+          break-inside: avoid;
+        }
+
+        .node,
+        .architecture,
+        .contract-table,
+        .guide-shell {
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">React version boundary map</p>
+          <h1>Two React versions. One Copilot core.</h1>
+          <p class="hero-copy">
+            The Host, Product UI, and Chatbot UI run React 19. Profile UI bundles React 18 and
+            mounts through one Module Federation Bridge exposure. The Host owns the Copilot core;
+            Profile and Product UI each own their domain state, UI, context, tools, and effect
+            lifecycles.
+          </p>
+        </div>
+        <aside class="status" aria-label="Architecture status">
+          <span>Profile bundle</span>
+          <strong>React 18.3.1 isolated</strong>
+        </aside>
+      </header>
+
+      <section class="summary-strip" aria-label="System summary">
+        <div class="summary-item is-host">
+          <code>React 19</code><span>Host · Product · Chatbot</span>
+        </div>
+        <div class="summary-item is-profile">
+          <code>React 18</code><span>One ProfileFeature root</span>
+        </div>
+        <div class="summary-item is-copilot">
+          <strong>1 core</strong><span>Distributed registrations</span>
+        </div>
+        <div class="summary-item is-isolated">
+          <code>shared: []</code><span>Profile manifest isolation</span>
+        </div>
+      </section>
+
+      <nav class="tabs" role="tablist" aria-label="Architecture views">
+        <button
+          class="tab"
+          id="tab-map"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="view-map"
+          data-view="map"
+        >
+          Version boundary
+        </button>
+        <button
+          class="tab"
+          id="tab-flow"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-flow"
+          data-view="flow"
+        >
+          Copilot round trip
+        </button>
+        <button
+          class="tab"
+          id="tab-contract"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-contract"
+          data-view="contract"
+        >
+          Runtime contract
+        </button>
+        <button
+          class="tab"
+          id="tab-guide"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-guide"
+          data-view="guide"
+        >
+          Implementation guide
+        </button>
+      </nav>
+
+      <section
+        class="view is-active"
+        id="view-map"
+        role="tabpanel"
+        aria-labelledby="tab-map"
+      >
+        <div class="architecture">
+          <div class="version-boundary" aria-label="React root boundary">
+            <section class="root-zone shared-root">
+              <p class="root-zone-label">React 19 composition tree</p>
+              <strong>Host provider/core and same-root React 19 remotes</strong>
+              <div class="root-members">
+                <span>Host UI</span>
+                <span>Product UI</span>
+                <span>Chatbot UI</span>
+                <span>CopilotKit provider</span>
+              </div>
+            </section>
+            <section class="bridge-gate">
+              <p class="bridge-label">1 React Bridge</p>
+              <strong>Plain bridge + navigation callback</strong>
+              <span class="bridge-detail">No React tree crosses</span>
+            </section>
+            <section class="root-zone isolated-root">
+              <p class="root-zone-label">Isolated React 18 root</p>
+              <strong>Profile owns state, rendering, and capabilities</strong>
+              <div class="root-members">
+                <span>ProfileFeature</span>
+                <span>Page + Copilot registration</span>
+                <span>Bundled React 18.3.1</span>
+              </div>
+            </section>
+          </div>
+
+          <div class="diagram-wrap">
+            <div class="diagram" aria-label="Module Federation architecture diagram">
+              <article
+                class="node node-host is-selected"
+                role="button"
+                tabindex="0"
+                data-node="host"
+                aria-pressed="true"
+              >
+                <span class="node-top">
+                  <span class="node-icon">H</span>
+                  <span class="port">:3000</span>
+                </span>
+                <span>
+                  <h2>Host UI</h2>
+                  <p class="node-path">host_ui</p>
+                  <span class="node-tags">
+                    <span class="node-tag">React 19</span>
+                    <span class="node-tag">Copilot core owner</span>
+                  </span>
+                </span>
+                <p class="node-description">
+                  Owns routing, shell state, the CopilotKit provider/core, and a generic bridge
+                  adapter—not either feature's data, schemas, or handlers.
+                </p>
+              </article>
+
+              <article
+                class="node node-runtime"
+                role="button"
+                tabindex="0"
+                data-node="runtime"
+                aria-pressed="false"
+              >
+                <span class="node-top">
+                  <span class="node-icon">AI</span>
+                  <span class="port">:4000</span>
+                </span>
+                <span>
+                  <h2>Copilot Runtime</h2>
+                  <p class="node-path">/api/copilotkit</p>
+                  <span class="node-tags">
+                    <span class="node-tag">Node / Express</span>
+                    <span class="node-tag">No React</span>
+                  </span>
+                </span>
+                <p class="node-description">
+                  Express server with CopilotKit Runtime and the DeepSeek-backed default agent.
+                </p>
+              </article>
+
+              <div class="connector connector-profile" aria-hidden="true">
+                <span>1 feature Bridge</span>
+              </div>
+              <div class="connector connector-product" aria-hidden="true">
+                <span>React 19 + bridge prop</span>
+              </div>
+              <div class="connector connector-chat" aria-hidden="true">
+                <span>Shared context</span>
+              </div>
+
+              <article
+                class="node node-profile"
+                role="button"
+                tabindex="0"
+                data-node="profile"
+                aria-pressed="false"
+              >
+                <span class="node-top">
+                  <span class="node-icon">P</span>
+                  <span class="port">:3001</span>
+                </span>
+                <span>
+                  <h2>Profile UI</h2>
+                  <p class="node-path">profile_ui/ProfileFeature</p>
+                  <span class="node-tags">
+                    <span class="node-tag">React 18</span>
+                    <span class="node-tag">Own registrations</span>
+                  </span>
+                </span>
+                <p class="node-description">
+                  One persistent React 18 root owns financial state, its page, context definition,
+                  and <code>update_financial_profile</code> handler.
+                </p>
+              </article>
+
+              <article
+                class="node node-product"
+                role="button"
+                tabindex="0"
+                data-node="product"
+                aria-pressed="false"
+              >
+                <span class="node-top">
+                  <span class="node-icon">F</span>
+                  <span class="port">:3002</span>
+                </span>
+                <span>
+                  <h2>Product UI</h2>
+                  <p class="node-path">product_ui/ProductFeature</p>
+                  <span class="node-tags">
+                    <span class="node-tag">React 19</span>
+                    <span class="node-tag">Own registrations</span>
+                  </span>
+                </span>
+                <p class="node-description">
+                  Owns criteria, fund catalog, search logic, results, page, context, and all three
+                  Product tool handlers.
+                </p>
+              </article>
+
+              <article
+                class="node node-chat"
+                role="button"
+                tabindex="0"
+                data-node="chat"
+                aria-pressed="false"
+              >
+                <span class="node-top">
+                  <span class="node-icon">C</span>
+                  <span class="port">:3003</span>
+                </span>
+                <span>
+                  <h2>Chatbot UI</h2>
+                  <p class="node-path">chatbot_ui/ChatbotPanel</p>
+                  <span class="node-tags">
+                    <span class="node-tag">React 19</span>
+                    <span class="node-tag">Copilot shared</span>
+                  </span>
+                </span>
+                <p class="node-description">
+                  Renders CopilotChat and consumes the host-owned CopilotKit provider through a
+                  shared singleton.
+                </p>
+              </article>
+            </div>
+            <div class="api-line" aria-hidden="true"><span>HTTP · /api/copilotkit</span></div>
+          </div>
+
+          <aside class="inspector" aria-live="polite">
+            <div>
+              <p class="inspector-label">Selected component</p>
+              <h3 id="inspector-title">Host UI · Composition root</h3>
+              <p id="inspector-copy">
+                The Host owns shell routing and the single CopilotKit core. It persistently mounts
+                both feature remotes and passes only the plain bridge plus generic navigation.
+              </p>
+            </div>
+            <code id="inspector-code">apps/host/src/JourneyHost.jsx</code>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-flow" role="tabpanel" aria-labelledby="tab-flow" hidden>
+        <div class="flow-grid" aria-label="CopilotKit tool round trip across remote ownership and the React version boundary">
+          <article class="flow-step">
+            <span class="step-number">1</span>
+            <h3>User asks in chat</h3>
+            <p>Chatbot UI renders inside the React 19 tree and consumes the Host's shared CopilotKit provider.</p>
+            <code>chatbot_ui/ChatbotPanel</code>
+            <span class="scope-tag">React 19 · shared context</span>
+          </article>
+          <article class="flow-step is-bridge">
+            <span class="step-number">2</span>
+            <h3>Host passes a narrow bridge</h3>
+            <p>The Host alone calls <code>useCopilotKit()</code>, then passes only a stable <code>copilotBridge</code> and generic navigation callback to each feature.</p>
+            <code>ProfileFeature + ProductFeature</code>
+            <span class="scope-tag">Plain props · no domain contract</span>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">3</span>
+            <h3>Feature remotes register themselves</h3>
+            <p>Profile's React 18 effects and Product's React 19 effects call <code>registerContext()</code> and <code>registerTool()</code> without calling a CopilotKit hook.</p>
+            <code>useEffect() → CopilotBridge</code>
+            <span class="scope-tag">Remote-owned definitions + cleanup</span>
+          </article>
+          <article class="flow-step is-runtime">
+            <span class="step-number">4</span>
+            <h3>Runtime plans from one registry</h3>
+            <p>Shell, Profile, and Product entries share one Host-owned registry. The model can select <code>update_financial_profile</code> or a Product tool.</p>
+            <code>POST /api/copilotkit · :4000</code>
+            <span class="scope-tag">Server · combined capabilities</span>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">5</span>
+            <h3>Remote-owned handler runs</h3>
+            <p>The selected handler updates state inside its defining remote. Financial data and fund-search mutations never return to the Host.</p>
+            <code>Profile state or Product state</code>
+            <span class="scope-tag">Definition and state stay together</span>
+          </article>
+          <article class="flow-step is-bridge">
+            <span class="step-number">6</span>
+            <h3>Feature root rerenders</h3>
+            <p>The owning root rerenders its page and refreshes its registered context. Profile stays in React 18; Product stays in React 19.</p>
+            <code>Feature → page + registration</code>
+            <span class="scope-tag">Each remote owns its lifecycle</span>
+          </article>
+        </div>
+
+        <div class="flow-rule" aria-label="CopilotKit and React Bridge boundary rule">
+          <div>
+            <strong>One Host-owned Copilot core</strong>
+            The provider and mutable registry instance are created once in the React 19 Host.
+          </div>
+          <span class="flow-rule-arrow">plain bridge + navigation callback →</span>
+          <div>
+            <strong>Remote-owned feature state and capabilities</strong>
+            React 18 Profile and React 19 Product each register through the same facade.
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="view"
+        id="view-contract"
+        role="tabpanel"
+        aria-labelledby="tab-contract"
+        hidden
+      >
+        <div class="table-wrap">
+          <table class="contract-table">
+            <thead>
+              <tr>
+                <th>Surface</th>
+                <th>React runtime</th>
+                <th>Federation contract</th>
+                <th>CopilotKit role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Host UI</strong><code>:3000 · host_ui</code></td>
+                <td>React 19 composition root</td>
+                <td>Consumes three manifests; persistently mounts Profile through Bridge React and Product normally</td>
+                <td>Owns provider/core and shell routing; passes only the plain bridge and navigation</td>
+              </tr>
+              <tr>
+                <td><strong>Profile UI</strong><code>:3001 · profile_ui</code></td>
+                <td>One isolated React 18.3.1 root</td>
+                <td>Publishes <code>./ProfileFeature</code> through <code>/v18</code></td>
+                <td>Owns data, calculations, UI, context/schema/handler, and their lifecycles</td>
+              </tr>
+              <tr>
+                <td><strong>Product UI</strong><code>:3002 · product_ui</code></td>
+                <td>React 19 shared singleton</td>
+                <td>Publishes normal component <code>./ProductFeature</code></td>
+                <td>Owns criteria, catalog, search, results, UI, context, three schemas/handlers, and their lifecycles</td>
+              </tr>
+              <tr>
+                <td><strong>Chatbot UI</strong><code>:3003 · chatbot_ui</code></td>
+                <td>React 19 shared singleton</td>
+                <td>Publishes normal component <code>./ChatbotPanel</code></td>
+                <td>Consumes the Host's shared CopilotKit context to render chat</td>
+              </tr>
+              <tr>
+                <td><strong>Copilot Runtime</strong><code>:4000 · Express</code></td>
+                <td>Node.js; no browser React</td>
+                <td>HTTP endpoints <code>/api/copilotkit</code> and <code>/health</code></td>
+                <td>Runs the model turn using messages, context, and tool definitions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="boundary-bars" aria-label="Shared and isolated dependency boundaries">
+          <div class="singleton-bar">
+            <strong>React 19 share scope</strong>
+            <code>Host UI</code>
+            <code>Product UI</code>
+            <code>Chatbot UI</code>
+            <code>react + react-dom</code>
+          </div>
+          <div class="singleton-bar copilot-boundary">
+            <strong>Single plain bridge contract</strong>
+            <code>Host alone reads core</code>
+            <code>Feature remotes call 2 methods</code>
+            <code>Cleanup mirrors registration</code>
+          </div>
+          <div class="singleton-bar profile-boundary">
+            <strong>Profile isolation boundary</strong>
+            <code>React 18.3.1 bundled</code>
+            <code>React DOM 18.3.1 bundled</code>
+            <code>No CopilotKit dependency · shared: []</code>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="view"
+        id="view-guide"
+        role="tabpanel"
+        aria-labelledby="tab-guide"
+        hidden
+      >
+        <div class="guide-shell">
+          <div class="guide-principle" aria-label="Why remote-owned CopilotKit registration works across both React versions">
+            <div class="guide-side">
+              <span class="guide-kicker">React 19 Host</span>
+              <strong>Owns the provider, core, and adapter</strong>
+              <p>
+                <code>useCopilotKit()</code> runs only here. A memoized facade translates two
+                framework-free methods into CopilotKit add/remove operations.
+              </p>
+            </div>
+            <div class="guide-handoff" aria-label="No React context crosses and one plain bridge does">
+              <strong>0 React contexts cross</strong>
+              <span>1 plain JavaScript bridge</span>
+              <span>mount/unmount owns cleanup</span>
+            </div>
+            <div class="guide-side">
+              <span class="guide-kicker">React 18 Profile · React 19 Product</span>
+              <strong>Each feature owns its domain and registrations</strong>
+              <p>
+                Each feature root owns its state, logic, and page. Its effects call both
+                registration methods and return cleanup functions without calling CopilotKit hooks.
+              </p>
+            </div>
+          </div>
+
+          <div class="guide-steps" aria-label="Implementation recipe">
+            <article class="guide-step">
+              <div class="guide-step-header">
+                <span class="guide-number">1</span>
+                <div>
+                  <h3>Pin the remote to React 18</h3>
+                  <span class="guide-file">profile-ui/package.json · rsbuild.config.js</span>
+                </div>
+              </div>
+              <p>
+                Install React and React DOM 18.3.1 in the Profile workspace, alias every React
+                import to that workspace, and omit federation sharing. The emitted Profile
+                manifest must keep <code>shared: []</code>. Profile needs no CopilotKit package.
+              </p>
+              <pre class="code-sample"><code>alias: {
+  react: resolve(profileNodeModules, "react"),
+  "react-dom": resolve(profileNodeModules, "react-dom")
+}
+// no Module Federation shared entries</code></pre>
+            </article>
+
+            <article class="guide-step is-bridge">
+              <div class="guide-step-header">
+                <span class="guide-number">2</span>
+                <div>
+                  <h3>Expose one complete feature Bridge</h3>
+                  <span class="guide-file">ProfileFeature.bridge.jsx</span>
+                </div>
+              </div>
+              <p>
+                Publish the state owner, page, and registrar as one feature. The version-specific
+                <code>/v18</code> producer mounts the whole feature with React DOM 18 instead of
+                joining the Host's React 19 tree.
+              </p>
+              <pre class="code-sample"><code>import { createBridgeComponent }
+  from "@module-federation/bridge-react/v18";
+
+export default createBridgeComponent({
+  rootComponent: ProfileFeature
+});
+
+exposes: {
+  "./ProfileFeature":
+    "./apps/profile-ui/src/ProfileFeature.bridge.jsx"
+}</code></pre>
+            </article>
+
+            <article class="guide-step is-host">
+              <div class="guide-step-header">
+                <span class="guide-number">3</span>
+                <div>
+                  <h3>Define a React-free contract</h3>
+                  <span class="guide-file">packages/copilot-bridge/CopilotBridge.ts</span>
+                </div>
+              </div>
+              <p>
+                Keep the boundary structural and imperative: plain data, schemas, and handlers
+                enter; promises and cleanup functions return. The Host serializes context values
+                before registration. There are no React or CopilotKit imports in this file.
+              </p>
+              <pre class="code-sample"><code>type Cleanup = () =&gt; void;
+
+interface CopilotBridge {
+  registerContext(input: {
+    description: string;
+    value: unknown;
+    agentIds?: string[];
+  }): Cleanup;
+
+  registerTool(input: {
+    name: string;
+    description?: string;
+    agentId?: string;
+    parameters?: unknown;
+    handler: (
+      args: Record&lt;string, unknown&gt;,
+      context?: {
+        signal?: AbortSignal;
+        agent?: unknown;
+      }
+    ) =&gt; Promise&lt;unknown&gt;;
+  }): Cleanup;
+}</code></pre>
+            </article>
+
+            <article class="guide-step">
+              <div class="guide-step-header">
+                <span class="guide-number">4</span>
+                <div>
+                  <h3>Adapt CopilotKit in the Host</h3>
+                  <span class="guide-file">apps/host/src/JourneyHost.jsx</span>
+                </div>
+              </div>
+              <p>
+                Call <code>useCopilotKit()</code> under the React 19 provider and memoize the
+                adapter. It serializes context values and mirrors every add operation with its
+                remove operation. This state-mutating POC disables automatic tool follow-up so a
+                new agent turn cannot race the next feature context effect. Pass the stable object
+                to both persistent feature roots.
+              </p>
+              <pre class="code-sample"><code>const { copilotkit } = useCopilotKit();
+const copilotBridge = useMemo(() =&gt; ({
+  registerContext(input) {
+    const value = typeof input.value === "string"
+      ? input.value : JSON.stringify(input.value);
+    const id = copilotkit.addContext({ ...input, value });
+    return () =&gt; copilotkit.removeContext(id);
+  },
+  registerTool(tool) {
+    copilotkit.addTool({
+      ...tool,
+      followUp: false,
+      handler: (args, context) =&gt;
+        tool.handler(args, {
+          signal: context?.signal,
+          agent: context?.agent
+        })
+    });
+    return () =&gt;
+      copilotkit.removeTool(tool.name, tool.agentId);
+  }
+}), [copilotkit]);
+
+&lt;ProfileFeature
+  copilotBridge={copilotBridge}
+  onNavigate={navigate}
+/&gt;
+&lt;ProductFeature
+  copilotBridge={copilotBridge}
+  onNavigate={navigate}
+/&gt;</code></pre>
+            </article>
+
+            <article class="guide-step">
+              <div class="guide-step-header">
+                <span class="guide-number">5</span>
+                <div>
+                  <h3>Register inside each feature remote</h3>
+                  <span class="guide-file">ProfileCopilotRegistration.jsx · ProductCopilotRegistration.jsx</span>
+                </div>
+              </div>
+              <p>
+                Define each context, schema, description, and handler beside the feature state.
+                One effect owns each registration lifecycle. Profile does this in its isolated
+                React 18 root; Product uses the same contract in the shared React 19 root for its
+                context plus <code>update_product_search_criteria</code>,
+                <code>run_product_search</code>, and <code>replace_fund_results</code>.
+              </p>
+              <pre class="code-sample"><code>useEffect(() =&gt;
+  copilotBridge.registerContext({
+    description: "Financial Profile UI state...",
+    value: { financialProfile, profileSummary },
+    agentIds: ["default"]
+  }),
+  [copilotBridge, financialProfile, profileSummary]
+);
+
+useEffect(() =&gt;
+  copilotBridge.registerTool({
+    name: "update_financial_profile",
+    agentId: "default",
+    parameters: financialProfileParameters,
+    handler: async updates =&gt; {
+      const updatedFields =
+        onUpdateFinancialProfile(updates);
+      return { updatedFields };
+    }
+  }),
+  [copilotBridge, onUpdateFinancialProfile]
+);</code></pre>
+            </article>
+
+            <article class="guide-step is-lifecycle">
+              <div class="guide-step-header">
+                <span class="guide-number">6</span>
+                <div>
+                  <h3>Keep both feature roots mounted</h3>
+                  <span class="guide-file">ProfileFeature + ProductFeature lifecycle</span>
+                </div>
+              </div>
+              <p>
+                The Host hides each inactive feature container instead of unmounting it. Profile
+                and Product state and registrations remain alive, while effect return values still
+                unregister context and tools during dependency changes or final unmount.
+              </p>
+              <pre class="code-sample"><code>&lt;div hidden={currentPage !== "financial-profile"}&gt;
+  &lt;ProfileFeature
+    copilotBridge={copilotBridge}
+    onNavigate={navigate}
+  /&gt;
+&lt;/div&gt;
+&lt;div hidden={currentPage !== "product-search"}&gt;
+  &lt;ProductFeature
+    copilotBridge={copilotBridge}
+    onNavigate={navigate}
+  /&gt;
+&lt;/div&gt;
+
+// Each Feature renders its own page and registrar.</code></pre>
+            </article>
+          </div>
+
+          <div class="guide-guardrails" aria-label="Cross-version registration guardrails">
+            <div class="guide-guardrail">
+              <strong>Keep the bridge framework-free</strong>
+              <span>Do not pass hooks, providers, contexts, React elements, or render functions.</span>
+            </div>
+            <div class="guide-guardrail">
+              <strong>Register each name once</strong>
+              <span>Mount one persistent feature instance so tool cleanup has one clear owner.</span>
+            </div>
+            <div class="guide-guardrail">
+              <strong>Do not cross-render React</strong>
+              <span>Remote tools should expose schema, data, and handlers—not React elements or render callbacks.</span>
+            </div>
+            <div class="guide-guardrail">
+              <strong>Mirror every cleanup</strong>
+              <span>Remove context by returned id and tools by the same <code>name</code> and <code>agentId</code>.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span>Source: current Rsbuild, Module Federation, React Bridge, and CopilotKit wiring</span>
+        <span>Current contract: Host-owned platform adapter · remote-owned state + UI + capabilities</span>
+      </footer>
+    </main>
+
+    <script>
+      const tabs = [...document.querySelectorAll(".tab")];
+      const views = [...document.querySelectorAll(".view")];
+      const nodes = [...document.querySelectorAll(".node")];
+
+      const nodeDetails = {
+        host: {
+          title: "Host UI · Composition root",
+          copy:
+            "The Host is the React 19 composition root and owns the single CopilotKit core. It persistently mounts both feature remotes and passes only the plain bridge plus generic navigation.",
+          code: "apps/host/src/JourneyHost.jsx"
+        },
+        runtime: {
+          title: "Copilot Runtime · Model boundary",
+          copy:
+            "The only server-side surface. It keeps provider credentials out of the browser and exposes the CopilotKit runtime handler.",
+          code: "apps/host/server/index.js"
+        },
+        profile: {
+          title: "Profile UI · One isolated React 18 feature",
+          copy:
+            "ProfileFeature owns the financial model, calculations, page, context definition, and tool handler. React 18 effects register through the plain Host adapter without importing CopilotKit.",
+          code: "apps/profile-ui/src/ProfileFeature.jsx"
+        },
+        product: {
+          title: "Product UI · Self-contained React 19 feature",
+          copy:
+            "ProductFeature owns its criteria, catalog, search logic, results, page, context, and three tool handlers. Its React 19 effects register through the same plain Host adapter.",
+          code: "apps/product-ui/src/ProductFeature.jsx"
+        },
+        chat: {
+          title: "Chatbot UI · Shared-context remote",
+          copy:
+            "Runs on the Host's shared React 19 and CopilotKit singletons, so CopilotChat sees the combined shell, Profile, and Product registry.",
+          code: "apps/chatbot-ui/src/ChatbotPanel.jsx"
+        }
+      };
+
+      function selectTab(nextTab) {
+        const viewName = nextTab.dataset.view;
+
+        tabs.forEach((tab) => {
+          const selected = tab === nextTab;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+
+        views.forEach((view) => {
+          const active = view.id === `view-${viewName}`;
+          view.classList.toggle("is-active", active);
+          view.hidden = !active;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectTab(tab));
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+          event.preventDefault();
+          const offset = event.key === "ArrowRight" ? 1 : -1;
+          const next = tabs[(index + offset + tabs.length) % tabs.length];
+          selectTab(next);
+          next.focus();
+        });
+      });
+
+      nodes.forEach((node) => {
+        const selectNode = () => {
+          nodes.forEach((item) => {
+            const selected = item === node;
+            item.classList.toggle("is-selected", selected);
+            item.setAttribute("aria-pressed", String(selected));
+          });
+
+          const detail = nodeDetails[node.dataset.node];
+          document.getElementById("inspector-title").textContent = detail.title;
+          document.getElementById("inspector-copy").textContent = detail.copy;
+          document.getElementById("inspector-code").textContent = detail.code;
+        };
+
+        node.addEventListener("click", selectNode);
+        node.addEventListener("keydown", (event) => {
+          if (!["Enter", " "].includes(event.key)) return;
+          event.preventDefault();
+          selectNode();
+        });
+      });
+    </script>
+  </body>
+</html>
