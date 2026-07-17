@@ -10,21 +10,21 @@
     <title>React Bridge + CopilotKit — Federated Investment Copilot</title>
     <style>
       :root {
-        color-scheme: dark;
-        --bg: #08101f;
-        --panel: rgba(17, 29, 51, 0.82);
-        --panel-strong: #13223c;
-        --line: rgba(152, 173, 211, 0.24);
-        --line-strong: rgba(152, 173, 211, 0.5);
-        --text: #f7f9ff;
-        --muted: #a6b4cf;
-        --blue: #6d9cff;
-        --cyan: #3ddbd9;
-        --violet: #b093ff;
-        --amber: #ffbe5c;
-        --green: #62d69a;
-        --red: #ff7b87;
-        --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+        color-scheme: light;
+        --bg: #ededed;
+        --panel: rgba(255, 255, 255, 0.96);
+        --panel-strong: #f3f3f3;
+        --line: #d7d8d6;
+        --line-strong: #929292;
+        --text: #333;
+        --muted: #5c5c5c;
+        --blue: #376798;
+        --cyan: #008580;
+        --violet: #716196;
+        --amber: #ba8111;
+        --green: #00847f;
+        --red: #db0011;
+        --shadow: 0 20px 56px rgba(0, 0, 0, 0.12);
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           sans-serif;
@@ -44,9 +44,9 @@
         margin: 0;
         color: var(--text);
         background:
-          radial-gradient(circle at 16% 8%, rgba(71, 105, 197, 0.2), transparent 29rem),
-          radial-gradient(circle at 86% 22%, rgba(87, 56, 170, 0.17), transparent 30rem),
-          linear-gradient(160deg, #0b1529 0%, var(--bg) 48%, #090e18 100%);
+          radial-gradient(circle at 16% 8%, rgba(219, 0, 17, 0.07), transparent 29rem),
+          radial-gradient(circle at 86% 22%, rgba(0, 133, 128, 0.06), transparent 30rem),
+          linear-gradient(160deg, #fff 0%, #f7f7f7 48%, var(--bg) 100%);
       }
 
       body::before {
@@ -54,8 +54,8 @@
         inset: 0;
         z-index: -1;
         background-image:
-          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+          linear-gradient(rgba(51, 51, 51, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(51, 51, 51, 0.035) 1px, transparent 1px);
         background-size: 48px 48px;
         content: "";
         mask-image: linear-gradient(to bottom, black, transparent 86%);
@@ -85,7 +85,7 @@
         align-items: center;
         gap: 9px;
         margin: 0 0 13px;
-        color: var(--cyan);
+        color: var(--red);
         font-size: 0.75rem;
         font-weight: 500;
         letter-spacing: 0.15em;
@@ -121,7 +121,7 @@
         gap: 8px;
         min-width: 190px;
         padding: 18px;
-        background: rgba(12, 22, 40, 0.72);
+        background: rgba(255, 255, 255, 0.94);
         border: 1px solid var(--line);
         border-radius: 16px;
         box-shadow: var(--shadow);
@@ -147,7 +147,7 @@
         height: 9px;
         background: var(--green);
         border-radius: 50%;
-        box-shadow: 0 0 0 5px rgba(98, 214, 154, 0.12);
+        box-shadow: 0 0 0 5px rgba(0, 132, 127, 0.12);
         content: "";
       }
 
@@ -156,7 +156,7 @@
         grid-template-columns: repeat(4, 1fr);
         margin: 26px 0;
         overflow: hidden;
-        background: rgba(14, 25, 45, 0.65);
+        background: rgba(255, 255, 255, 0.88);
         border: 1px solid var(--line);
         border-radius: 14px;
       }
@@ -189,7 +189,7 @@
       }
 
       .summary-item.is-host {
-        color: var(--blue);
+        color: var(--red);
       }
 
       .summary-item.is-profile {
@@ -209,7 +209,7 @@
         gap: 4px;
         margin-bottom: 18px;
         padding: 4px;
-        background: rgba(10, 19, 34, 0.76);
+        background: rgba(255, 255, 255, 0.92);
         border: 1px solid var(--line);
         border-radius: 12px;
       }
@@ -232,7 +232,9 @@
       .tab[aria-selected="true"] {
         color: var(--text);
         background: var(--panel-strong);
-        box-shadow: inset 0 0 0 1px rgba(152, 173, 211, 0.2);
+        box-shadow:
+          inset 0 0 0 1px rgba(51, 51, 51, 0.08),
+          inset 0 -2px 0 var(--red);
       }
 
       .view {
@@ -253,7 +255,7 @@
 
       .architecture {
         padding: 28px;
-        background: linear-gradient(145deg, rgba(18, 31, 55, 0.88), rgba(9, 17, 31, 0.92));
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(243, 243, 243, 0.96));
         border: 1px solid var(--line);
         border-radius: 20px;
         box-shadow: var(--shadow);
@@ -271,7 +273,7 @@
       .bridge-gate {
         min-width: 0;
         padding: 16px 18px;
-        background: rgba(8, 16, 29, 0.66);
+        background: rgba(243, 243, 243, 0.88);
         border: 1px solid var(--line);
         border-radius: 14px;
       }
@@ -282,7 +284,7 @@
       }
 
       .root-zone.shared-root {
-        border-color: color-mix(in srgb, var(--blue) 44%, transparent);
+        border-color: color-mix(in srgb, var(--red) 44%, transparent);
       }
 
       .root-zone.isolated-root {
@@ -320,7 +322,7 @@
         min-height: 24px;
         padding: 3px 8px;
         color: var(--muted);
-        background: rgba(152, 173, 211, 0.08);
+        background: rgba(51, 51, 51, 0.04);
         border: 1px solid var(--line);
         border-radius: 999px;
         font-size: 0.69rem;
@@ -368,10 +370,10 @@
         padding: 20px;
         color: var(--text);
         text-align: left;
-        background: rgba(17, 30, 52, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         border: 1px solid var(--node-color, var(--line-strong));
         border-radius: 16px;
-        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         transition:
           transform 180ms ease,
@@ -384,14 +386,14 @@
       .node.is-selected {
         outline: none;
         transform: translateY(-3px);
-        background: rgba(22, 39, 68, 0.98);
+        background: #f9f9f9;
         box-shadow:
-          0 22px 54px rgba(0, 0, 0, 0.34),
+          0 20px 42px rgba(0, 0, 0, 0.14),
           0 0 0 3px color-mix(in srgb, var(--node-color) 16%, transparent);
       }
 
       .node-host {
-        --node-color: var(--blue);
+        --node-color: var(--red);
         grid-column: 3 / 9;
         grid-row: 1;
         min-height: 220px;
@@ -434,10 +436,15 @@
         place-items: center;
         width: 38px;
         height: 38px;
-        color: #07101f;
+        color: #fff;
         background: var(--node-color);
         border-radius: 11px;
         font-weight: 500;
+      }
+
+      .node-runtime .node-icon,
+      .flow-step.is-runtime .step-number {
+        color: var(--text);
       }
 
       .port {
@@ -525,7 +532,7 @@
         padding: 4px 7px;
         color: var(--muted);
         white-space: nowrap;
-        background: #101c31;
+        background: #fff;
         border: 1px solid var(--line);
         border-radius: 999px;
         font: 500 0.65rem ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -539,7 +546,7 @@
         z-index: 3;
         width: calc(8.333% + 30px);
         height: 1px;
-        background: linear-gradient(90deg, var(--blue), var(--amber));
+        background: linear-gradient(90deg, var(--red), var(--amber));
       }
 
       .api-line::after {
@@ -561,8 +568,8 @@
         padding: 4px 7px;
         color: var(--amber);
         white-space: nowrap;
-        background: #101c31;
-        border: 1px solid rgba(255, 190, 92, 0.25);
+        background: #fff;
+        border: 1px solid rgba(186, 129, 17, 0.32);
         border-radius: 999px;
         font: 500 0.64rem ui-monospace, SFMono-Regular, Menlo, monospace;
         transform: translateX(-50%);
@@ -579,7 +586,7 @@
         align-items: center;
         margin-top: 24px;
         padding: 20px;
-        background: rgba(8, 16, 29, 0.66);
+        background: rgba(243, 243, 243, 0.9);
         border: 1px solid var(--line);
         border-radius: 14px;
       }
@@ -610,8 +617,8 @@
         max-width: 420px;
         padding: 11px 13px;
         overflow: auto;
-        color: #cfe0ff;
-        background: #091322;
+        color: #fff;
+        background: #263039;
         border: 1px solid var(--line);
         border-radius: 9px;
         font-size: 0.76rem;
@@ -649,7 +656,7 @@
         place-items: center;
         width: 34px;
         height: 34px;
-        color: #07101f;
+        color: #fff;
         background: var(--cyan);
         border-radius: 50%;
         font-weight: 500;
@@ -699,7 +706,7 @@
         margin-top: 18px;
         padding: 16px 18px;
         color: var(--muted);
-        background: rgba(10, 19, 34, 0.75);
+        background: rgba(243, 243, 243, 0.92);
         border: 1px solid var(--line);
         border-radius: 14px;
         font-size: 0.8rem;
@@ -747,7 +754,7 @@
 
       .contract-table th {
         color: var(--muted);
-        background: rgba(9, 18, 33, 0.92);
+        background: #ededed;
         font-size: 0.7rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -777,7 +784,7 @@
         margin-top: 20px;
         padding: 16px 18px;
         color: var(--muted);
-        background: rgba(10, 19, 34, 0.75);
+        background: rgba(243, 243, 243, 0.92);
         border: 1px solid var(--line);
         border-radius: 14px;
         font-size: 0.8rem;
@@ -791,8 +798,8 @@
       .singleton-bar code {
         padding: 5px 8px;
         color: var(--violet);
-        background: rgba(176, 147, 255, 0.09);
-        border: 1px solid rgba(176, 147, 255, 0.2);
+        background: rgba(113, 97, 150, 0.08);
+        border: 1px solid rgba(113, 97, 150, 0.22);
         border-radius: 999px;
       }
 
@@ -808,19 +815,19 @@
 
       .singleton-bar.profile-boundary code {
         color: var(--cyan);
-        background: rgba(61, 219, 217, 0.08);
-        border-color: rgba(61, 219, 217, 0.2);
+        background: rgba(0, 133, 128, 0.08);
+        border-color: rgba(0, 133, 128, 0.22);
       }
 
       .singleton-bar.copilot-boundary code {
         color: var(--green);
-        background: rgba(98, 214, 154, 0.08);
-        border-color: rgba(98, 214, 154, 0.2);
+        background: rgba(0, 132, 127, 0.08);
+        border-color: rgba(0, 132, 127, 0.22);
       }
 
       .guide-shell {
         overflow: hidden;
-        background: linear-gradient(145deg, rgba(18, 31, 55, 0.88), rgba(9, 17, 31, 0.92));
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(243, 243, 243, 0.96));
         border: 1px solid var(--line);
         border-radius: 20px;
         box-shadow: var(--shadow);
@@ -877,7 +884,7 @@
       .guide-handoff::before {
         width: 100%;
         height: 1px;
-        background: linear-gradient(90deg, var(--blue), var(--amber), var(--cyan));
+        background: linear-gradient(90deg, var(--red), var(--amber), var(--cyan));
         content: "";
       }
 
@@ -923,7 +930,7 @@
         place-items: center;
         width: 31px;
         height: 31px;
-        color: #07101f;
+        color: #fff;
         background: var(--cyan);
         border-radius: 50%;
         font-weight: 500;
@@ -950,15 +957,15 @@
         margin: 16px 0 0;
         padding: 14px 16px;
         overflow-x: auto;
-        color: #cfe0ff;
-        background: #091322;
+        color: #fff;
+        background: #263039;
         border-left: 2px solid var(--step-accent, var(--cyan));
         font: 400 0.72rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
         white-space: pre;
       }
 
       .guide-step.is-host {
-        --step-accent: var(--blue);
+        --step-accent: var(--red);
       }
 
       .guide-step.is-bridge {
@@ -1197,11 +1204,11 @@
           color-scheme: light;
           --bg: #fff;
           --panel: #fff;
-          --panel-strong: #f5f7fb;
-          --line: #ccd4e1;
-          --line-strong: #9ba8bc;
-          --text: #172033;
-          --muted: #556278;
+          --panel-strong: #f3f3f3;
+          --line: #d7d8d6;
+          --line-strong: #929292;
+          --text: #333;
+          --muted: #5c5c5c;
         }
 
         body {
