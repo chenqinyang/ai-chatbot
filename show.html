@@ -1160,7 +1160,7 @@
               <div class="badge-row" role="group" aria-label="Host runtime details">
                 <span class="badge">React 19</span>
                 <span class="badge">shared singletons</span>
-                <span class="badge">persistent mounts</span>
+                <span class="badge">active route only</span>
               </div>
             </div>
 
@@ -1404,8 +1404,8 @@
 
       <footer>
         <span>
-          Profile stays mounted when hidden, preserving React 18 state and active
-          registrations.
+          Route navigation unmounts the inactive feature and removes its context and
+          frontend tools.
         </span>
         <span>
           Key contract: <code>onProfileIntegrationChange({ context, handler })</code>

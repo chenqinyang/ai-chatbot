@@ -10,7 +10,8 @@ Host UI :3000
 ├── owns the CopilotKit provider and its single browser-side core
 ├── creates a framework-free CopilotBridge for Product UI
 ├── direct-loads profile_ui/ProfileAdapter as a React 19 remote
-├── keeps product_ui/ProductFeature mounted as a normal React 19 remote
+├── mounts only the active Profile or Product feature
+├── shows the live CopilotKit context and frontend-tool registry counts
 └── loads chatbot_ui/ChatbotPanel
 
 Profile Adapter :3001 (React 19)
@@ -44,7 +45,7 @@ Product UI keeps the original framework-free bridge design. The Host calls `useC
 
 A Profile tool call therefore runs in the React 19 adapter, invokes the latest handler owned by the React 18 feature, and causes the feature to publish fresh context after its state changes. Product tool calls continue to execute their remote-owned handlers through the Host's plain bridge. No Profile or Product data model, schema, or mutation handler lives in `JourneyHost.jsx`.
 
-The Host keeps both feature roots mounted while hiding the inactive route. Their state and Copilot registrations therefore remain available across journey navigation. The Host retains only platform concerns: route metadata, remote loading/error boundaries, the provider/core, the Product-only bridge adapter, and generic navigation.
+The Host conditionally mounts only the active feature route. Navigating away unmounts that feature, runs its context and tool cleanup, and destroys the nested React 18 root when leaving Profile. Returning to a route creates fresh feature state and registrations. A compact registry board reads the Host-owned CopilotKit core and displays the current context and frontend-tool totals, making the cleanup visible during navigation.
 
 Each application starts through an asynchronous bootstrap module. This lets the federation runtime initialize shared React and CopilotKit modules before application code consumes them.
 
@@ -97,7 +98,7 @@ PUBLIC_COPILOT_RUNTIME_URL=https://api.example.com/api/copilotkit
 - Host UI: route composition, the CopilotKit provider/core, the Product-only `CopilotBridge`, direct remote composition, loading boundaries, and the runtime URL. It knows feature routes and remote entry points, not their domain state, schemas, tool names, or handlers.
 - Profile Adapter: React 19 direct remote exposed as `profile_ui/ProfileAdapter`. It consumes the Host provider, owns Profile CopilotKit hooks and the `update_financial_profile` schema, keeps the latest legacy context and handler, and owns the nested React bridge loading and fallback.
 - Profile UI Legacy: React 18 financial state, calculations, presentation, and mutation handler. It exposes `profile_ui_legacy/ProfileFeature` as a Bridge application and publishes only the plain `{ context, handler }` integration value to the adapter.
-- Product UI: React 19 Product Search criteria, fund catalog, filtering, results, presentation, agent context, and all Product tool schemas and handlers. It exposes one persistent `ProductFeature` and registers through the Host's plain bridge prop.
+- Product UI: React 19 Product Search criteria, fund catalog, filtering, results, presentation, agent context, and all Product tool schemas and handlers. It exposes `ProductFeature` and registers through the Host's plain bridge prop while its route is mounted.
 - Chatbot UI: chat presentation and collapse state. It receives the active page and agent id from the host.
 - Runtime server: model/provider credentials and CopilotKit runtime handler.
 

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import {
@@ -135,15 +135,20 @@ function App() {
           </nav>
         </header>
 
-        <div hidden={currentPage !== "financial-profile"}>
+        <CopilotRegistryBoard
+          copilotkit={copilotkit}
+          currentPage={currentPage}
+        />
+
+        {currentPage === "financial-profile" ? (
           <RemoteBoundary name="Profile adapter">
             <Suspense fallback={<RemoteLoading label="Loading Profile UI" />}>
               <ProfileAdapter onNavigate={navigate} />
             </Suspense>
           </RemoteBoundary>
-        </div>
+        ) : null}
 
-        <div hidden={currentPage !== "product-search"}>
+        {currentPage === "product-search" ? (
           <RemoteBoundary name="Product UI">
             <Suspense fallback={<RemoteLoading label="Loading Product UI" />}>
               <ProductFeature
@@ -152,7 +157,7 @@ function App() {
               />
             </Suspense>
           </RemoteBoundary>
-        </div>
+        ) : null}
 
         <Routes>
           <Route path="/" element={<Navigate to="/financial-profile" replace />} />
@@ -169,6 +174,124 @@ function App() {
       </RemoteBoundary>
     </div>
   );
+}
+
+function CopilotRegistryBoard({ copilotkit, currentPage }) {
+  const [registry, setRegistry] = useState(() =>
+    readCopilotRegistry(copilotkit)
+  );
+
+  useEffect(() => {
+    let frameId = null;
+
+    const refreshRegistry = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      // CopilotKit emits context-registry changes but not tool-registry
+      // changes. In this app each feature owns both lifecycles, so wait through
+      // the next paint cycle for passive tool effects to settle before reading
+      // the final registry.
+      frameId = window.requestAnimationFrame(() => {
+        frameId = window.requestAnimationFrame(() => {
+          frameId = null;
+          const nextRegistry = readCopilotRegistry(copilotkit);
+
+          setRegistry((currentRegistry) =>
+            currentRegistry.signature === nextRegistry.signature
+              ? currentRegistry
+              : nextRegistry
+          );
+        });
+      });
+    };
+
+    const subscription = copilotkit.subscribe({
+      onContextChanged: refreshRegistry
+    });
+
+    refreshRegistry();
+
+    return () => {
+      subscription.unsubscribe();
+
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, [copilotkit, currentPage]);
+
+  return (
+    <section
+      className="copilot-registry-board"
+      aria-labelledby="copilot-registry-title"
+    >
+      <div className="copilot-registry-heading">
+        <span className="copilot-registry-dot" aria-hidden="true" />
+        <div>
+          <span>Host provider</span>
+          <h2 id="copilot-registry-title">CopilotKit live registry</h2>
+        </div>
+      </div>
+
+      <dl
+        className="copilot-registry-counts"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <div>
+          <dt>Contexts</dt>
+          <dd>{registry.contextCount}</dd>
+        </div>
+        <div>
+          <dt>Frontend tools</dt>
+          <dd>{registry.tools.length}</dd>
+        </div>
+      </dl>
+
+      <details className="copilot-registry-tools">
+        <summary>
+          {registry.tools.length === 0
+            ? "No registered tools"
+            : `View ${registry.tools.length} registered tool${
+                registry.tools.length === 1 ? "" : "s"
+              }`}
+        </summary>
+        {registry.tools.length > 0 ? (
+          <ul>
+            {registry.tools.map((tool) => (
+              <li key={tool.key}>
+                <code>{tool.name}</code>
+                <span>{tool.agentId}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </details>
+    </section>
+  );
+}
+
+function readCopilotRegistry(copilotkit) {
+  const contextCount = Object.keys(copilotkit.context).length;
+  const tools = copilotkit.tools
+    .map((tool) => {
+      const agentId = tool.agentId || "global";
+
+      return {
+        agentId,
+        key: `${agentId}:${tool.name}`,
+        name: tool.name
+      };
+    })
+    .sort((left, right) => left.key.localeCompare(right.key));
+
+  return {
+    contextCount,
+    signature: `${contextCount}:${tools.map((tool) => tool.key).join("|")}`,
+    tools
+  };
 }
 
 function RemoteLoading({ label, compact = false }) {
