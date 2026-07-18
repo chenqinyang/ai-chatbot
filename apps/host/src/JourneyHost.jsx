@@ -12,16 +12,11 @@ import {
   useCopilotKit,
   useFrontendTool
 } from "@copilotkit/react-core/v2";
-import { createRemoteAppComponent } from "@module-federation/bridge-react";
 import { RemoteBoundary } from "./RemoteBoundary.jsx";
 
 /** @typedef {import("../../../packages/copilot-bridge/CopilotBridge").CopilotBridge} CopilotBridge */
 
-const ProfileFeature = createRemoteAppComponent({
-  loader: () => import("profile_ui/ProfileFeature"),
-  loading: <RemoteLoading label="Loading Profile UI" />,
-  fallback: ProfileBridgeFallback
-});
+const ProfileAdapter = lazy(() => import("profile_ui/ProfileAdapter"));
 const ProductFeature = lazy(() => import("product_ui/ProductFeature"));
 const ChatbotPanel = lazy(() => import("chatbot_ui/ChatbotPanel"));
 
@@ -50,7 +45,7 @@ function App() {
     "financial-profile";
 
   /** @type {CopilotBridge} */
-  const copilotBridge = useMemo(
+  const productCopilotBridge = useMemo(
     () => ({
       registerContext(input) {
         const value =
@@ -97,7 +92,7 @@ function App() {
 
   useAgentContext({
     description:
-      "Host-owned shell context. Use it to know the active route and page. Feature remotes register their own domain context through the Copilot bridge.",
+      "Host-owned shell context. Use it to know the active route and page. Feature remotes register their own domain context.",
     value: JSON.stringify(shellContext, null, 2)
   });
 
@@ -141,9 +136,9 @@ function App() {
         </header>
 
         <div hidden={currentPage !== "financial-profile"}>
-          <RemoteBoundary name="Profile UI">
+          <RemoteBoundary name="Profile adapter">
             <Suspense fallback={<RemoteLoading label="Loading Profile UI" />}>
-              <ProfileFeature copilotBridge={copilotBridge} onNavigate={navigate} />
+              <ProfileAdapter onNavigate={navigate} />
             </Suspense>
           </RemoteBoundary>
         </div>
@@ -151,7 +146,10 @@ function App() {
         <div hidden={currentPage !== "product-search"}>
           <RemoteBoundary name="Product UI">
             <Suspense fallback={<RemoteLoading label="Loading Product UI" />}>
-              <ProductFeature copilotBridge={copilotBridge} onNavigate={navigate} />
+              <ProductFeature
+                copilotBridge={productCopilotBridge}
+                onNavigate={navigate}
+              />
             </Suspense>
           </RemoteBoundary>
         </div>
@@ -179,20 +177,6 @@ function RemoteLoading({ label, compact = false }) {
       <LoaderCircle className="spin-icon" size={18} />
       <span>{label}</span>
     </div>
-  );
-}
-
-function ProfileBridgeFallback({ error }) {
-  return (
-    <section className="remote-error" role="alert">
-      <div>
-        <strong>Profile UI is unavailable</strong>
-        <span>{error instanceof Error ? error.message : "The React 18 bridge failed to load."}</span>
-      </div>
-      <button type="button" onClick={() => window.location.reload()}>
-        Retry
-      </button>
-    </section>
   );
 }
 

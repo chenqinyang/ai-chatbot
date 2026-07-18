@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
-import ProfileCopilotRegistration from "./ProfileCopilotRegistration.jsx";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ProfilePage from "./ProfilePage.jsx";
 
 const initialFinancialProfile = {
@@ -12,8 +11,13 @@ const initialFinancialProfile = {
 };
 
 const financialFieldKeys = new Set(Object.keys(initialFinancialProfile));
+const noNavigation = () => {};
+const noIntegrationPublisher = () => {};
 
-export default function ProfileFeature({ copilotBridge, onNavigate = () => {} }) {
+export default function ProfileFeature({
+  onNavigate = noNavigation,
+  onProfileIntegrationChange = noIntegrationPublisher
+}) {
   const [financialProfile, setFinancialProfile] = useState(initialFinancialProfile);
 
   const profileSummary = useMemo(
@@ -46,21 +50,35 @@ export default function ProfileFeature({ copilotBridge, onNavigate = () => {} })
     }));
   }, []);
 
+  const profileIntegration = useMemo(
+    () => ({
+      context: {
+        financialProfile,
+        profileSummary
+      },
+      handler: updateFinancialProfile
+    }),
+    [financialProfile, profileSummary, updateFinancialProfile]
+  );
+
+  useEffect(() => {
+    onProfileIntegrationChange(profileIntegration);
+  }, [onProfileIntegrationChange, profileIntegration]);
+
+  useEffect(
+    () => () => {
+      onProfileIntegrationChange(null);
+    },
+    [onProfileIntegrationChange]
+  );
+
   return (
-    <>
-      <ProfileCopilotRegistration
-        copilotBridge={copilotBridge}
-        financialProfile={financialProfile}
-        profileSummary={profileSummary}
-        onUpdateFinancialProfile={updateFinancialProfile}
-      />
-      <ProfilePage
-        financialProfile={financialProfile}
-        profileSummary={profileSummary}
-        onFinancialFieldChange={updateFinancialField}
-        onNavigate={onNavigate}
-      />
-    </>
+    <ProfilePage
+      financialProfile={financialProfile}
+      profileSummary={profileSummary}
+      onFinancialFieldChange={updateFinancialField}
+      onNavigate={onNavigate}
+    />
   );
 }
 
